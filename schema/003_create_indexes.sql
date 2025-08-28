@@ -1,0 +1,12 @@
+-- Índices para búsquedas frecuentes
+CREATE INDEX idx_usuario_correo ON persona(correo);
+CREATE INDEX idx_mascota_dueno ON mascota(dueno_id);
+CREATE INDEX idx_cita_fecha ON cita(fecha_hora);
+CREATE INDEX idx_cita_estado ON cita(estado);
+CREATE INDEX idx_cita_veterinario ON cita(veterinario_id);
+CREATE INDEX idx_historial_mascota ON historial_medico(mascota_id);
+CREATE INDEX idx_historial_fecha ON historial_medico(cita_id);
+CREATE INDEX idx_notif_usuario ON notificacion(usuario_id);
+CREATE INDEX idx_notif_estado ON notificacion(estado);
+CREATE INDEX idx_calificacion_vet ON calificacion(veterinario_id);
+CREATE INDEX idx_pago_estado ON pago(estado);
