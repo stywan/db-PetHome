@@ -1,6 +1,6 @@
 -- Información personal base
 CREATE TABLE persona (
-    id              RAW(16) PRIMARY KEY,
+    id              NUMBER PRIMARY KEY,
     nombres         VARCHAR2(100) NOT NULL,
     apellidos       VARCHAR2(100) NOT NULL,
     correo          VARCHAR2(150) UNIQUE,
@@ -12,8 +12,8 @@ CREATE TABLE persona (
 
 -- Cuentas de usuario con autenticación
 CREATE TABLE usuario (
-    id              RAW(16) PRIMARY KEY,
-    persona_id      RAW(16) UNIQUE NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    persona_id      NUMBER UNIQUE NOT NULL,
     clave_hash      VARCHAR2(255) NOT NULL,
     rol             VARCHAR2(30),
     activo          CHAR(1) DEFAULT '1',
@@ -22,8 +22,8 @@ CREATE TABLE usuario (
 
 -- Información específica de veterinarios
 CREATE TABLE veterinario (
-    id                  RAW(16) PRIMARY KEY,
-    persona_id          RAW(16) UNIQUE NOT NULL,
+    id                  NUMBER PRIMARY KEY,
+    persona_id          NUMBER UNIQUE NOT NULL,
     nro_licencia        VARCHAR2(50) UNIQUE NOT NULL,
     anios_experiencia   NUMBER,
     biografia           CLOB
@@ -31,38 +31,38 @@ CREATE TABLE veterinario (
 
 -- Catálogo de especializaciones
 CREATE TABLE especializacion (
-    id          RAW(16) PRIMARY KEY,
+    id          NUMBER PRIMARY KEY,
     nombre      VARCHAR2(100) UNIQUE NOT NULL,
     activa      CHAR(1) DEFAULT '1'
 );
 
 -- Relación muchos a muchos: veterinario - especializaciones
 CREATE TABLE veterinario_especializacion (
-    veterinario_id      RAW(16) NOT NULL,
-    especializacion_id  RAW(16) NOT NULL,
+    veterinario_id      NUMBER NOT NULL,
+    especializacion_id  NUMBER NOT NULL,
     PRIMARY KEY (veterinario_id, especializacion_id)
 );
 
 -- Catálogo de especies
 CREATE TABLE especie (
-    id      RAW(16) PRIMARY KEY,
+    id      NUMBER PRIMARY KEY,
     nombre  VARCHAR2(100) UNIQUE NOT NULL
 );
 
 -- Razas por especie
 CREATE TABLE raza (
-    id          RAW(16) PRIMARY KEY,
-    especie_id  RAW(16) NOT NULL,
+    id          NUMBER PRIMARY KEY,
+    especie_id  NUMBER NOT NULL,
     nombre      VARCHAR2(100) NOT NULL
 );
 
 -- Registro de mascotas
 CREATE TABLE mascota (
-    id                  RAW(16) PRIMARY KEY,
-    dueno_id            RAW(16) NOT NULL,
+    id                  NUMBER PRIMARY KEY,
+    dueno_id            NUMBER NOT NULL,
     nombre              VARCHAR2(100) NOT NULL,
-    especie_id          RAW(16) NOT NULL,
-    raza_id             RAW(16),
+    especie_id          NUMBER NOT NULL,
+    raza_id             NUMBER,
     fecha_nacimiento    DATE,
     genero              VARCHAR2(15),
     esterilizado        CHAR(1),
@@ -73,7 +73,7 @@ CREATE TABLE mascota (
 
 -- Catálogo de medicamentos
 CREATE TABLE medicamento (
-    id                  RAW(16) PRIMARY KEY,
+    id                  NUMBER PRIMARY KEY,
     nombre              VARCHAR2(150) UNIQUE NOT NULL,
     principio_activo    VARCHAR2(150),
     forma               VARCHAR2(50)
@@ -81,9 +81,9 @@ CREATE TABLE medicamento (
 
 -- Medicamentos crónicos/permanentes por mascota
 CREATE TABLE mascota_medicamento (
-    id              RAW(16) PRIMARY KEY,
-    mascota_id      RAW(16) NOT NULL,
-    medicamento_id  RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    mascota_id      NUMBER NOT NULL,
+    medicamento_id  NUMBER NOT NULL,
     dosis           VARCHAR2(100),
     frecuencia      VARCHAR2(100),
     fecha_inicio    DATE,
@@ -92,7 +92,7 @@ CREATE TABLE mascota_medicamento (
 
 -- Catálogo general de servicios
 CREATE TABLE servicio (
-    id          RAW(16) PRIMARY KEY,
+    id          NUMBER PRIMARY KEY,
     nombre      VARCHAR2(100) NOT NULL,
     descripcion CLOB,
     precio_base NUMBER(18,2) NOT NULL
@@ -100,16 +100,16 @@ CREATE TABLE servicio (
 
 -- Servicios y precios personalizados por veterinario
 CREATE TABLE veterinario_servicio (
-    id                  RAW(16) PRIMARY KEY,
-    veterinario_id      RAW(16) NOT NULL,
-    servicio_id         RAW(16) NOT NULL
+    id                  NUMBER PRIMARY KEY,
+    veterinario_id      NUMBER NOT NULL,
+    servicio_id         NUMBER NOT NULL
 );
 
 -- Citas principales
 CREATE TABLE cita (
-    id              RAW(16) PRIMARY KEY,
-    mascota_id      RAW(16) NOT NULL,
-    veterinario_id  RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    mascota_id      NUMBER NOT NULL,
+    veterinario_id  NUMBER NOT NULL,
     fecha_hora      TIMESTAMP NOT NULL,
     estado          VARCHAR2(20) DEFAULT 'PENDIENTE',
     notas           CLOB
@@ -117,17 +117,17 @@ CREATE TABLE cita (
 
 -- Servicios incluidos en cada cita
 CREATE TABLE cita_servicio (
-    id                      RAW(16) PRIMARY KEY,
-    cita_id                 RAW(16) NOT NULL,
-    veterinario_servicio_id RAW(16) NOT NULL
+    id                      NUMBER PRIMARY KEY,
+    cita_id                 NUMBER NOT NULL,
+    veterinario_servicio_id NUMBER NOT NULL
 );
 
 -- Registros médicos por consulta
 CREATE TABLE historial_medico (
-    id              RAW(16) PRIMARY KEY,
-    mascota_id      RAW(16) NOT NULL,
-    veterinario_id  RAW(16) NOT NULL,
-    cita_id         RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    mascota_id      NUMBER NOT NULL,
+    veterinario_id  NUMBER NOT NULL,
+    cita_id         NUMBER NOT NULL,
     diagnostico     CLOB,
     tratamiento     CLOB,
     recomendaciones CLOB,
@@ -136,9 +136,9 @@ CREATE TABLE historial_medico (
 
 -- Medicamentos recetados en consultas específicas
 CREATE TABLE receta (
-    id              RAW(16) PRIMARY KEY,
-    historial_id    RAW(16) NOT NULL,
-    medicamento_id  RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    historial_id    NUMBER NOT NULL,
+    medicamento_id  NUMBER NOT NULL,
     dosis           VARCHAR2(100),
     frecuencia      VARCHAR2(100),
     duracion        VARCHAR2(100)
@@ -146,10 +146,10 @@ CREATE TABLE receta (
 
 -- Sistema de calificaciones
 CREATE TABLE calificacion (
-    id              RAW(16) PRIMARY KEY,
-    cita_id         RAW(16) NOT NULL,
-    usuario_id      RAW(16) NOT NULL,
-    veterinario_id  RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    cita_id         NUMBER NOT NULL,
+    usuario_id      NUMBER NOT NULL,
+    veterinario_id  NUMBER NOT NULL,
     puntuacion      NUMBER(1),
     comentario      VARCHAR2(100),
     creada_en       TIMESTAMP DEFAULT SYSTIMESTAMP
@@ -157,8 +157,8 @@ CREATE TABLE calificacion (
 
 -- Pagos por cita
 CREATE TABLE pago (
-    id          RAW(16) PRIMARY KEY,
-    cita_id     RAW(16) NOT NULL,
+    id          NUMBER PRIMARY KEY,
+    cita_id     NUMBER NOT NULL,
     monto       NUMBER(18,2) NOT NULL,
     moneda      VARCHAR2(10) DEFAULT 'CLP',
     estado      VARCHAR2(20) DEFAULT 'PENDIENTE',
@@ -168,12 +168,21 @@ CREATE TABLE pago (
 
 -- Notificaciones unificadas
 CREATE TABLE notificacion (
-    id              RAW(16) PRIMARY KEY,
-    usuario_id      RAW(16) NOT NULL,
+    id              NUMBER PRIMARY KEY,
+    usuario_id      NUMBER NOT NULL,
     evento_tipo     VARCHAR2(50),
     canal           VARCHAR2(20),
     destinatario    VARCHAR2(200),
     contenido       CLOB,
     estado          VARCHAR2(20) DEFAULT 'PENDIENTE',
     creada_en       TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+
+CREATE TABLE auditoria_pagos (
+    id             NUMBER PRIMARY KEY,
+    pago_id        NUMBER NOT NULL,
+    fecha_evento   DATE DEFAULT SYSDATE,
+    descripcion    VARCHAR2(500),
+    usuario_evento VARCHAR2(100)
 );
